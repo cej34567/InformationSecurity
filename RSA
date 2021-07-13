@@ -1,0 +1,37 @@
+#include <iostream>
+using namespace std;
+
+int euclidean(int a, int b){
+	int euclide=(a-1)*(b-1);
+	
+	return euclide;
+}
+
+void GCD(int a, int b) {
+	int A = a, B = b, x1 = 1, x2 = 0, y1 = 0, y2 = 1;
+	int share, rest, X, Y;
+	while (B) {
+		share = A / B;
+		// gcd 계산
+		rest = A % B;
+		A = B, B = rest;
+
+		// s 계산
+		X = x1 - share * x2;
+		x1 = x2, x2 = X;
+
+		// t 계산
+		Y = y1 - share * y2;
+		y1 = y2, y2 = Y;
+	}
+	X = x1, Y = y1;
+	printf("%d x %d + %d x %d = %d \n", a, X, b, Y, A);
+	printf("gcd(%d, %d) = d = %d, s = %d, t = %d \n", a, b, A, X, Y);
+}
+
+int main() {
+	int p=29, q=31, e=419;
+	int n=p*q;
+	
+	GCD(n, euclidean(p, q));
+}
