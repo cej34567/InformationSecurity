@@ -1,5 +1,26 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
+
+int euclidean(int a, int b);
+int GCD(int a, int b);
+int modul(int a, int b, int c);
+int process(int d, int n, int m);
+
+int main() {
+	int p=29, q=31, e=419, m;
+	int n=p*q;
+	int d_p[10]={1,0,0,1,0,1,0,1,1};
+	
+	int d = GCD(n, euclidean(p, q));
+	
+	cout<<"\n"<<"메시지를 입력하세요: ";
+	cin>>m;
+	
+	process(d, n, m);
+	cout<<"c(암호문): "<<modul(m, d, n)<<endl;
+	cout<<"p(복호화): "<<modul(modul(m,d,n), d, n); 
+	 
+}
 
 int euclidean(int a, int b){
 	int euclide=(a-1)*(b-1);
@@ -7,9 +28,9 @@ int euclidean(int a, int b){
 	return euclide;
 }
 
-void GCD(int a, int b) {
+int GCD(int a, int b) {
 	int A = a, B = b, x1 = 1, x2 = 0, y1 = 0, y2 = 1;
-	int share, rest, X, Y;
+	int share, rest, X, Y, min=A%B, max=b, d;
 	while (B) {
 		share = A / B;
 		// gcd 계산
@@ -23,15 +44,57 @@ void GCD(int a, int b) {
 		// t 계산
 		Y = y1 - share * y2;
 		y1 = y2, y2 = Y;
+		
+		if(min<=X&&max>=X) d=X;
+		else if (min<=Y && max>=Y) d=Y;
 	}
 	X = x1, Y = y1;
 	printf("%d x %d + %d x %d = %d \n", a, X, b, Y, A);
-	printf("gcd(%d, %d) = d = %d, s = %d, t = %d \n", a, b, A, X, Y);
+	printf("gcd(%d, %d) = %d, s = %d, t = %d \n", a, b, A, X, Y);
+	printf("d = %d", d);
+	
+	return d;
 }
 
-int main() {
-	int p=29, q=31, e=419;
-	int n=p*q;
+int process(int d, int n, int m){
+
+	int binary[20]={0, };
+	int position = 0, num=d;
 	
-	GCD(n, euclidean(p, q));
+	while(1){
+		binary[position] = num%2;
+		num = num/2;
+		position++;
+		if(num==0) break;
+	}
+	cout<<"\n"<<"e(2지수 표현): ";
+	for(int i=position-1; i>=0; i--) printf("%d", binary[i]);
+	
+	int c=0, f=-1, c_[10]={0, }, f_[10]={0, };
+	for(int i=position-1; i>=0; i--){
+		c_[i]=2*c;
+		f_[i]=(f*f)%n;
+		if(binary[i]==1){
+			c_[i]=c_[i]+1;
+			f_[i]=(f_[i]*m)%n;
+		}
+		c=c_[i], f=f_[i];
+	}
+	cout<<"\n"<<"i : ";
+	for(int i=position-1; i>=0; i--) printf("%4d", i);
+	cout<<"\n"<<"bi: ";
+	for(int i=position-1; i>=0; i--) printf("%4d", binary[i]);
+	cout<<"\n"<<"c : ";
+	for(int i=position-1; i>=0; i--) printf("%4d", c_[i]);
+	cout<<"\n"<<"f : ";
+	for(int i=position-1; i>=0; i--) printf("%4d", f_[i]);
+	cout<<"\n";
+}
+
+int modul(int a, int b, int c){
+	int res;
+	
+	res=(a^b)%c;
+	
+	return res;
 }
